@@ -81,16 +81,16 @@ class Hydro
      */
     private function handler($pdo, $query, $params, $type)
     {
-        $prepare = $pdo->prepare($query);
+        $query = $pdo->prepare($query);
         if (!empty($params)) {
             foreach ($params as $i => $value) {
-                $prepare->bindParam($i + 1, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+                $query->bindParam($i + 1, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
         }
-        $query = $prepare->execute($params);
+        $execute = $query->execute($params);
 
         if ($type == self::QUERY_TYPE_EXECUTE) {
-            return $query;
+            return $execute;
         }
 
         if ($type == self::QUERY_TYPE_FETCH_MANY) {
