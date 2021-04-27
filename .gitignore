@@ -1,0 +1,6 @@
+vendor
+
+# vim ignore
+*.swp
+*.swn
+*.swo

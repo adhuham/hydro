@@ -1,0 +1,19 @@
+{
+  "name": "adhuham/hydro",
+  "type": "library",
+  "description": "Fast and lightweight Query Builder",
+  "keywords": ["php", "mysql", "query-builder"],
+  "homepage": "https://adhuham.com/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohamed Adhuham",
+      "email": "hello@adhuham.com",
+      "homepage": "https://adhuham.com/",
+      "role": "Owner"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Hydro\\": "src/"}
+  }
+}
