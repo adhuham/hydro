@@ -1,6 +1,14 @@
 # Hydro
 **PACKAGE IS NOT READY FOR PRODUCTION. WORK STILL IN PROGRESS**
 
+***
+**[Installation](https://github.com/adhuham/hydro/wiki/01.-Installation)** &mdash; 
+**[Setup](https://github.com/adhuham/hydro/wiki/02.-Setup)** &mdash;
+**[Usage](https://github.com/adhuham/hydro/wiki/03.-Usage:-Select)** &mdash;
+**[Performance](https://github.com/adhuham/hydro/wiki/09.-Performance)** &mdash;
+**[Credits](https://github.com/adhuham/hydro/wiki/10.-Credits)
+*** 
+
 Hydro is a fast and lightweight Query Builder. It is incredibly easy to use with its natural and intuitive syntax.
 
 Hydro is designed with speed and memory efficiency in mind. As a result, it has extremely low footprint (consist of only just few classes) and is completely dependency-free, which takes up less of your memory.
