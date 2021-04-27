@@ -61,3 +61,4 @@ Hydro (using raw statements)
 PDO
 = 138,688
 ```
+### See [Performance](https://github.com/adhuham/hydro/wiki/09.-Performance)
