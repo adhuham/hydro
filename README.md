@@ -4,9 +4,9 @@
 ***
 **[Installation](https://github.com/adhuham/hydro/wiki/01.-Installation)** &mdash; 
 **[Setup](https://github.com/adhuham/hydro/wiki/02.-Setup)** &mdash;
-**[Usage](https://github.com/adhuham/hydro/wiki/03.-Usage:-Select)** &mdash;
-**[Performance](https://github.com/adhuham/hydro/wiki/09.-Performance)** &mdash;
-**[Credits](https://github.com/adhuham/hydro/wiki/10.-Credits)**
+**[Usage](https://github.com/adhuham/hydro/wiki/03.-Usage)** &mdash;
+**[Performance](https://github.com/adhuham/hydro/wiki/10.-Performance)** &mdash;
+**[Credits](https://github.com/adhuham/hydro/wiki/11.-Credits)**
 *** 
 
 Hydro is a fast and lightweight Query Builder. It is incredibly easy to use with its natural and intuitive syntax.
