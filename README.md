@@ -6,7 +6,7 @@
 **[Setup](https://github.com/adhuham/hydro/wiki/02.-Setup)** &mdash;
 **[Usage](https://github.com/adhuham/hydro/wiki/03.-Usage:-Select)** &mdash;
 **[Performance](https://github.com/adhuham/hydro/wiki/09.-Performance)** &mdash;
-**[Credits](https://github.com/adhuham/hydro/wiki/10.-Credits)
+**[Credits](https://github.com/adhuham/hydro/wiki/10.-Credits)**
 *** 
 
 Hydro is a fast and lightweight Query Builder. It is incredibly easy to use with its natural and intuitive syntax.
