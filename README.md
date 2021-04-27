@@ -1,54 +1,44 @@
 # Hydro
 **PACKAGE IS NOT READY FOR PRODUCTION. WORK STILL IN PROGRESS**
 
-Fast and lightweight Query Builder. Dependency-free and consists of only few classes.
+Hydro is a fast and lightweight Query Builder. It is incredibly easy to use with its natural and intuitive syntax.
 
-## Usage
+Hydro is designed with speed and memory efficiency in mind. As a result, it has extremely low footprint (consist of only just few classes) and is completely dependency-free, which takes up less of your memory.
+
+The cost of speed and performance gain is kept minimal. With Hydro, you don't have to trade the ease-of-use for better performance.
+
+## Installation & Setup
+Use Composer.
 ```
-$pdo = new PDOConnection(...);
+composer require adhuham/hydro
+```
+
+```php
+use Hydro\Hydro;
+
+$pdo = PDOConnection(...);
 $hydro = new Hydro($pdo);
 ```
 
-#### SELECT
-```
+## Basic Usage
+```php
 // multiple
 $hydro->table('post')->select('id', 'title', 'content')->get();
 
 // single
 $hydro->table('post')->select('id', 'title', 'content')->one();
-```
 
-#### WHERE
-```
-// simple
+// where
 $hydro->table('post')->select('id', 'title', 'content')->where('id', 1)->get();
 
-// nested where support
-$hydro->table('post')
-  ->select('id', 'title', 'content')
-  ->where(function ($q) {
-    $q->where('id', 1)->orWhere('title', 'Untitled');
-  })
-  ->get();
-```
-
-#### JOINS
-
-```
-// simple
+// joins
 $hydro->table('post')
   ->select('id', 'title', 'content')
   ->leftJoin('tag', 'post.tag_id', '=', 'tag.id')
   ->get();
-
-// complex join
-$hydro->table('post')
-  ->select('id', 'title', 'content')
-  ->leftJoin('tag', function ($q) {
-    $q->on('post.tag_id', '=', 'tag.id')->orOn('post.tag2_id', '=', 'tag.id');
-  })
-  ->get();
 ```
+### Read the full [Documentation](https://github.com/adhuham/hydro/wiki)
+
 ## TODO
 - [ ] Documentation
 - [ ] Testing
