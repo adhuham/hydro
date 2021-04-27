@@ -37,7 +37,7 @@ $hydro->table('post')
   ->leftJoin('tag', 'post.tag_id', '=', 'tag.id')
   ->get();
 ```
-### Read the full [Documentation](https://github.com/adhuham/hydro/wiki)
+### See [Documentation](https://github.com/adhuham/hydro/wiki)
 
 ## TODO
 - [ ] Documentation
