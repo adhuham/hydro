@@ -248,16 +248,19 @@ class Parser
             }
 
             $values = array_values($this->update);
+
+            $params = [];
             foreach ($values as $value) {
-                $this->params[] = !empty($value) ? $value : null;
+                $params[] = !empty($value) ? $value : null;
             }
+
+            $this->params = array_merge($params, $this->params);
 
             $query .= 'UPDATE ' . $this->table;
             $query .= ' SET ' . implode(', ', $fields);
             if (!empty($this->where)) {
                 $query .= ' WHERE ' . implode(' ', $this->where);
             }
-
 
             return $query;
         }
