@@ -495,6 +495,40 @@ class Builder extends Parser
     }
 
     /**
+     * Build and fetch multiple records and throw error if record is empty
+     *
+     * @return $handler
+     *
+     */
+    public function getOrFail()
+    {
+        $fetch = $this->get();
+
+        if (empty($fetch)) {
+            throw new \Error('Record is empty');
+        }
+
+        return $fetch;
+    }
+
+    /**
+     * Build and fetch one record and throw error if record is empty
+     *
+     * @return $handler
+     *
+     */
+    public function oneOrFail()
+    {
+        $fetch = $this->one();
+
+        if (empty($fetch)) {
+            throw new \Error('Record is empty');
+        }
+
+        return $fetch;
+    }
+
+    /**
      * Execute a query without fetching
      *
      * @return $handler
