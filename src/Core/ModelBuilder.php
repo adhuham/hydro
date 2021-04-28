@@ -136,7 +136,8 @@ class ModelBuilder extends Builder
             foreach ($this->model->fields as $field) {
                 $this->modelSelect[$this->alias][] = $this->aliasedField(
                     $this->alias,
-                    $field
+                    $field,
+                    true
                 );
             }
         // handle array-based selection
@@ -150,17 +151,24 @@ class ModelBuilder extends Builder
                     continue;
                 }
 
+                $removePrefix = ($alias == $this->alias);
+
                 // select all fields (including custom fields)
                 if (is_string($fields) && $fields == '*') {
                     foreach ($model->fields as $field) {
-                        $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
+                        $this->modelSelect[$alias][] = $this->aliasedField(
+                            $alias,
+                            $field,
+                            $removePrefix
+                        );
                     }
 
                     foreach ($model->customFields as $field) {
                         $this->modelSelect[$alias][] = $this->aliasedCustomField(
                             $alias,
                             $field,
-                            $model->customFields[$field]
+                            $model->customFields[$field],
+                            $removePrefix
                         );
                     }
 
@@ -173,10 +181,15 @@ class ModelBuilder extends Builder
                         $this->modelSelect[$alias][] = $this->aliasedCustomField(
                             $alias,
                             $fields,
-                            $model->customFields[$fields]
+                            $model->customFields[$fields],
+                            $removePrefix
                         );
                     } else {
-                        $this->modelSelect[$alias][] = $this->aliasedField($alias, $fields);
+                        $this->modelSelect[$alias][] = $this->aliasedField(
+                            $alias,
+                            $fields,
+                            $removePrefix
+                        );
                     }
 
                     continue;
@@ -187,10 +200,15 @@ class ModelBuilder extends Builder
                         $this->modelSelect[$alias][] = $this->aliasedCustomField(
                             $alias,
                             $field,
-                            $model->customFields[$field]
+                            $model->customFields[$field],
+                            $removePrefix
                         );
                     } else {
-                        $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
+                        $this->modelSelect[$alias][] = $this->aliasedField(
+                            $alias,
+                            $field,
+                            $removePrefix
+                        );
                     }
                 }
             }
@@ -442,8 +460,12 @@ class ModelBuilder extends Builder
      * @return $aliasedField
      *
      */
-    private function aliasedField(string $alias, string $field)
+    private function aliasedField(string $alias, string $field, bool $removePrefixInAlias = false)
     {
+        if ($removePrefixInAlias) {
+            return '`' . $alias . '`.`' . $field . '` as `' . $field . '`';
+        }
+
         return '`' . $alias . '`.`' . $field . '` as `' . $alias . '.' . $field . '`';
     }
 
