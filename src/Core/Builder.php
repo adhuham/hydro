@@ -436,8 +436,7 @@ class Builder extends Parser
         $args = func_get_args();
 
         foreach ($args as $field) {
-            $this->orderBy[] = $this->escapeField($field);
-            $this->orderBy[] = 'DESC';
+            $this->orderBy[] = $this->escapeField($field) . ' DESC';
         }
 
         return $this;
