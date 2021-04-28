@@ -245,7 +245,7 @@ class Parser
             $values = array_values($this->update);
 
             $query .= 'UPDATE ' . $this->table;
-            $query .= 'SET ' . implode(', ', $field);
+            $query .= 'SET ' . implode(', ', $fields);
             if (!empty($this->where)) {
                 $query .= ' WHERE ' . implode(' ', $this->where);
             }
