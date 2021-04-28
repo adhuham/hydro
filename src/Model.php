@@ -37,7 +37,7 @@ abstract class Model
     {
         self::createInstance();
 
-        return self::$instance[static::class]->hydro->model(self::$instance);
+        return self::$instance[static::class]->hydro->model(self::$instance[static::class]);
     }
 
     public static function builder()
