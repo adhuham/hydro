@@ -5,7 +5,7 @@ namespace Hydro;
 abstract class Model
 {
     public $hydro;
-    private static $instance = null;
+    protected static $instance;
 
     public $fields = [];
     public $customFields = [];
@@ -23,25 +23,27 @@ abstract class Model
 
     private static function createInstance()
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new static();
-            if (method_exists(static::$instance, 'initialize')) {
-                static::$instance->initialize();
+        $calledClass = static::class;
+
+        if (is_null(self::$instance[$calledClass])) {
+            self::$instance[$calledClass] = new static();
+            if (method_exists(self::$instance[$calledClass], 'initialize')) {
+                self::$instance[$calledClass]->initialize();
             }
         }
     }
 
     public static function query()
     {
-        static::createInstance();
+        self::createInstance();
 
-        return static::$instance->hydro->model(static::$instance);
+        return self::$instance[static::class]->hydro->model(self::$instance);
     }
 
     public static function builder()
     {
-        static::createInstance();
+        self::createInstance();
 
-        return static::$instance->query()->withoutJoins()->withoutFilters();
+        return self::$instance[static::class]->query()->withoutJoins()->withoutFilters();
     }
 }
