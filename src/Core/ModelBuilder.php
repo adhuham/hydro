@@ -478,11 +478,11 @@ class ModelBuilder extends Builder
                     $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
                 }
 
-                foreach ($model->customFields as $field) {
+                foreach ($model->customFields as $field => $customField) {
                     $this->modelSelect[$alias][] = $this->aliasedCustomField(
                         $alias,
                         $field,
-                        $model->customFields[$field]
+                        $customField
                     );
                 }
             }
