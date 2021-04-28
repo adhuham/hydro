@@ -342,6 +342,48 @@ class ModelBuilder extends Builder
     }
 
     /**
+     * Build and fetch multiple records and throw error if record is empty
+     *
+     * @return $handler
+     *
+     */
+    public function getOrFail()
+    {
+        $this->buildJoins();
+        $this->buildFilters();
+        $this->buildSelect();
+
+        $fetch = parent::get();
+
+        if (empty($fetch)) {
+            throw new \Error('Record is empty');
+        }
+
+        return $fetch;
+    }
+
+    /**
+     * Build and fetch one record and throw error if record is empty
+     *
+     * @return $handler
+     *
+     */
+    public function oneOrFail()
+    {
+        $this->buildJoins();
+        $this->buildFilters();
+        $this->buildSelect();
+
+        $fetch = parent::one();
+
+        if (empty($fetch)) {
+            throw new \Error('Record is empty');
+        }
+
+        return $fetch;
+    }
+
+    /**
      * Build and return the query as string
      *
      * @return $query
