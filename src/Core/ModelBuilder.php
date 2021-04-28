@@ -11,7 +11,7 @@ class ModelBuilder extends Builder
     private $model;
     private $alias;
 
-    private $isSelectFieldsGiven = true;
+    private $isSelectFieldsGiven = false;
     private $joinModelInstances = [];
 
     private $modelSelect = [];
