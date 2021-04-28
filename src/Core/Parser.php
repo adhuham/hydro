@@ -225,13 +225,14 @@ class Parser
             }
 
             $values = array_values($this->insert);
+            foreach ($values as $value) {
+                $this->params[] = !empty($value) ? $value : null;
+            }
 
             $query .= 'INSERT INTO ' . $this->table . ' ';
             $query .= '(' . implode(', ', $fields) . ')';
             $query .= ' VALUES ';
             $query .= '(' . implode(', ', array_fill(1, count($values), '?')) . ')';
-
-            $this->params = $values;
 
             return $query;
         }
@@ -243,7 +244,9 @@ class Parser
             }
 
             $values = array_values($this->update);
-            $this->params = array_merge($values, $this->params);
+            foreach ($values as $value) {
+                $this->params[] = !empty($value) ? $value : null;
+            }
 
             $query .= 'UPDATE ' . $this->table;
             $query .= ' SET ' . implode(', ', $fields);
