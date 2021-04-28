@@ -32,4 +32,9 @@ abstract class Model
 
         return self::$modelInstance->hydro->model(self::$modelInstance);
     }
+
+    public static function builder()
+    {
+        return self::$modelInstance->query()->withoutJoins()->withoutFilters();
+    }
 }
