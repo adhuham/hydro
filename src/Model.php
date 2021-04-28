@@ -23,25 +23,25 @@ abstract class Model
 
     private static function createInstance()
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new static();
-            if (method_exists(self::$instance, 'initialize')) {
-                self::$instance->initialize();
+        if (is_null(static::$instance)) {
+            static::$instance = new static();
+            if (method_exists(static::$instance, 'initialize')) {
+                static::$instance->initialize();
             }
         }
     }
 
     public static function query()
     {
-        self::createInstance();
+        static::createInstance();
 
-        return self::$instance->hydro->model(self::$instance);
+        return static::$instance->hydro->model(static::$instance);
     }
 
     public static function builder()
     {
-        self::createInstance();
+        static::createInstance();
 
-        return self::$instance->query()->withoutJoins()->withoutFilters();
+        return static::$instance->query()->withoutJoins()->withoutFilters();
     }
 }
