@@ -25,7 +25,7 @@ abstract class Model
     {
         $calledClass = static::class;
 
-        if (is_null(self::$instance[$calledClass])) {
+        if (!isset(self::$instance[$calledClass])) {
             self::$instance[$calledClass] = new static();
             if (method_exists(self::$instance[$calledClass], 'initialize')) {
                 self::$instance[$calledClass]->initialize();
