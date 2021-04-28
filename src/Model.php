@@ -4,8 +4,7 @@ namespace Hydro;
 
 abstract class Model
 {
-    protected $hydro;
-    private static $modelInstance;
+    public $hydro;
 
     public $join;
     public $filter;
@@ -15,12 +14,8 @@ abstract class Model
         return $this->hydro->model($this);
     }
 
-    public static function query()
+    public function query()
     {
-        if (is_null(self::$modelInstance)) {
-            self::$modelInstance = new static();
-        }
-
-        return self::$modelInstance->table();
+        return $this->table();
     }
 }

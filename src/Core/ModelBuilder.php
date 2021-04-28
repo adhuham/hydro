@@ -272,13 +272,20 @@ class ModelBuilder extends Builder
     }
 
     /**
-     * Call the prepared joins from the model
+     * Build joins
      *
      * @return void
      *
      */
     private function buildJoins()
     {
+        // build joins from the model
+        if (!empty($this->modelJoins)) {
+            foreach ($this->modelJoins as $join) {
+                $join($this);
+            }
+        }
+
         if (!empty($this->joinsList)) {
             foreach ($this->joinsList as $args) {
                 parent::{$args[0]}(...$args[1]);
