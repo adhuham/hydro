@@ -5,6 +5,7 @@ namespace Hydro;
 abstract class Model
 {
     public $hydro;
+    private $modelInstance = null;
 
     public $fields = [];
     public $customFields = [];
@@ -13,11 +14,22 @@ abstract class Model
 
     public function table()
     {
+        if (method_exists($this, 'initialize')) {
+            $this->initialize();
+        }
+
         return $this->hydro->model($this);
     }
 
-    public function query()
+    public static function query()
     {
-        return $this->table();
+        if (is_null(self::$modelInstance)) {
+            self::$modelInstance = new static();
+            if (method_exists(self::$modelInstance, 'initialize')) {
+                self::$modelInstance->initialize();
+            }
+        }
+
+        return self::$modelInstance->hydro->model(self::$modelInstance);
     }
 }
