@@ -6,8 +6,10 @@ abstract class Model
 {
     public $hydro;
 
-    public $join;
-    public $filter;
+    public $fields = [];
+    public $customFields = [];
+    public $join = [];
+    public $filter = [];
 
     public function table()
     {

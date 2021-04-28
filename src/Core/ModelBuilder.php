@@ -15,6 +15,7 @@ class ModelBuilder extends Builder
     private $joinModelInstances = [];
 
     private $modelSelect = [];
+    private $modelCustomFields = [];
     private $modelJoins = [];
     private $modelFilters = [];
 
@@ -29,6 +30,7 @@ class ModelBuilder extends Builder
 
         parent::__construct($table, $pdo, $handler);
 
+        $this->modelCustomFields = $this->model->customFields;
         $this->modelJoins = $this->model->join;
         $this->modelFilters = $this->model->filter;
 
@@ -137,17 +139,59 @@ class ModelBuilder extends Builder
                     $field
                 );
             }
+        // handle array-based selection
         } elseif (count($args) == 1 && is_array($args[0])) {
             $this->isSelectFieldsGiven = true;
 
             foreach ($args[0] as $alias => $fields) {
+                $model = $this->joinModelInstances[$alias] ?? null;
+
+                if (is_null($model)) {
+                    continue;
+                }
+
+                // select all fields (including custom fields)
+                if (is_string($fields) && $fields == '*') {
+                    foreach ($model->fields as $field) {
+                        $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
+                    }
+
+                    foreach ($model->customFields as $field) {
+                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                            $alias,
+                            $field,
+                            $model->customFields[$field]
+                        );
+                    }
+
+                    continue;
+                }
+
+                // handle single fields passed as string
                 if (is_string($fields)) {
-                    $this->modelSelect[$alias][] = $this->aliasedField($alias, $fields);
+                    if (isset($model->customFields[$fields])) {
+                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                            $alias,
+                            $fields,
+                            $model->customFields[$fields]
+                        );
+                    } else {
+                        $this->modelSelect[$alias][] = $this->aliasedField($alias, $fields);
+                    }
+
                     continue;
                 }
 
                 foreach ($fields as $field) {
-                    $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
+                    if (isset($model->customFields[$field])) {
+                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                            $alias,
+                            $field,
+                            $model->customFields[$field]
+                        );
+                    } else {
+                        $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
+                    }
                 }
             }
         } else {
@@ -171,6 +215,13 @@ class ModelBuilder extends Builder
                     $this->modelSelect[$alias][] = $this->aliasedField(
                         $alias,
                         $realField
+                    );
+                } elseif (isset($model) && isset($model->customFields[$realField])) {
+                    // check if the field is a custom field
+                    $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                        $alias,
+                        $realField,
+                        $model->customFields[$realField]
                     );
                 } else {
                     $this->modelSelect[$this->alias][] = $field;
@@ -350,6 +401,14 @@ class ModelBuilder extends Builder
                 foreach ($model->fields as $field) {
                     $this->modelSelect[$alias][] = $this->aliasedField($alias, $field);
                 }
+
+                foreach ($model->customFields as $field) {
+                    $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                        $alias,
+                        $field,
+                        $model->customFields[$field]
+                    );
+                }
             }
 
             $args[0] = $model->table . ' as ' . $alias;
@@ -370,5 +429,20 @@ class ModelBuilder extends Builder
     private function aliasedField(string $alias, string $field)
     {
         return '`' . $alias . '`.`' . $field . '` as `' . $alias . '.' . $field . '`';
+    }
+
+    /**
+     * Alias model custom fields with table prefix
+     *
+     * @param string $alias
+     * @param string $field
+     * @param string $customField
+     *
+     * @return $aliasedField
+     *
+     */
+    private function aliasedCustomField(string $alias, string $field, string $customField)
+    {
+        return $customField . ' as `' . $alias . '.' . $field . '`';
     }
 }
