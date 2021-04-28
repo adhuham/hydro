@@ -233,6 +233,22 @@ class ModelBuilder extends Builder
     }
 
     /**
+     * SELECT DISTINCT statement
+     *
+     * @return Builder $this;
+     *
+     */
+    public function selectDistinct()
+    {
+        $this->currentClause = self::CLAUSE_SELECT;
+
+        $this->select['prefunction'] = 'DISTINCT';
+        $this->select(func_get_args());
+
+        return $this;
+    }
+
+    /**
      * LEFT JOIN statement
      *
      * @return ModelBuilder $this;
