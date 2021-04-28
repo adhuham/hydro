@@ -5,7 +5,7 @@ namespace Hydro;
 abstract class Model
 {
     public $hydro;
-    protected static $instance;
+    private static $instance = [];
 
     public $fields = [];
     public $customFields = [];
