@@ -21,7 +21,7 @@ abstract class Model
         return $this->hydro->model($this);
     }
 
-    public static function query()
+    private static function createInstance()
     {
         if (is_null(self::$modelInstance)) {
             self::$modelInstance = new static();
@@ -29,12 +29,19 @@ abstract class Model
                 self::$modelInstance->initialize();
             }
         }
+    }
+
+    public static function query()
+    {
+        self::createInstance();
 
         return self::$modelInstance->hydro->model(self::$modelInstance);
     }
 
     public static function builder()
     {
+        self::createInstance();
+
         return self::$modelInstance->query()->withoutJoins()->withoutFilters();
     }
 }
