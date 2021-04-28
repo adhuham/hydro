@@ -262,13 +262,13 @@ class ModelBuilder extends Builder
      * @return $query
      *
      */
-    public function toSql()
+    public function sql()
     {
         $this->buildJoins();
         $this->buildFilters();
         $this->buildSelect();
 
-        return parent::toSql();
+        return parent::sql();
     }
 
     /**

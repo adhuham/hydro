@@ -517,7 +517,7 @@ class Builder extends Parser
      * @return $query
      *
      */
-    public function toSql()
+    public function sql()
     {
         return $this->build();
     }
