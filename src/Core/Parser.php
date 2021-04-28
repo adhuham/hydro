@@ -83,6 +83,7 @@ class Parser
         $field = $this->escapeField($field);
 
         $placeholder = null;
+        $hasParams = false;
 
         if ($type == self::COND_TYPE_NORMAL) {
             if (count($args) == 2) {
@@ -91,15 +92,18 @@ class Parser
                 $comparison = $args[1];
                 $param = $args[2];
             }
+            $hasParams = true;
         } elseif ($type == self::COND_TYPE_BETWEEN) {
             $param = $args[1];
+            $hasParams = true;
             $placeholder = '? AND ?';
         } elseif ($type == self::COND_TYPE_IN) {
             $param = $args[1];
+            $hasParams = true;
             $placeholder = '(' . rtrim(str_repeat('?, ', count($param)), ', ') . ')';
         }
 
-        if (isset($param)) {
+        if ($hasParams) {
             if (is_array($param)) {
                 // handles more than one params passed as array
                 $this->params = array_merge($this->params, $param);
