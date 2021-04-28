@@ -48,8 +48,9 @@ $hydro->table('post')
 ### See [Documentation](https://github.com/adhuham/hydro/wiki)
 
 ## TODO
-- [ ] Documentation
-- [ ] Testing
+- [ ] Writing Tests
+- [ ] Proper exception and error handling
+- [ ] Completing the documentation
 
 ## Performance
 Memory usage comparison between Eloquent, Laravel's Query Builder, Hydro and raw PDO. (Lower is better)
