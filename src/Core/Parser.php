@@ -180,6 +180,11 @@ class Parser
             return $field;
         }
 
+        // do not backtick if a backtick '`' exists in the field
+        if (stripos($field, '`') !== false) {
+            return $field;
+        }
+
         // split the field and alias if the field is aliased
         if (stripos($field, ' as ') != false) {
             list($field, $alias) = preg_split('/ as /i', $field);

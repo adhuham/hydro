@@ -3,6 +3,8 @@
 namespace Hydro;
 
 use Hydro\Core\Builder;
+use Hydro\Core\ModelBuilder;
+use Hydro\Model;
 use PDO;
 
 class Hydro
@@ -55,6 +57,19 @@ class Hydro
     {
         $builder = new Builder(null, $this->pdo, $this->handler);
         return $builder->raw($query);
+    }
+
+    /**
+     * Build query from Model instance
+     *
+     * @param Hydro\Model $model
+     *
+     * @return Builder
+     *
+     */
+    public function model(Model $model)
+    {
+        return new ModelBuilder($model, $this->pdo, $this->handler);
     }
 
     /**
