@@ -140,6 +140,16 @@ class ModelBuilder extends Builder
                     true
                 );
             }
+
+            // select custom fields too
+            foreach ($this->model->customFields as $field => $customField) {
+                $this->modelSelect[$this->alias][] = $this->aliasedCustomField(
+                    $this->alias,
+                    $field,
+                    $customField,
+                    true
+                );
+            }
         // handle array-based selection
         } elseif (count($args) == 1 && is_array($args[0])) {
             $this->isSelectFieldsGiven = true;
