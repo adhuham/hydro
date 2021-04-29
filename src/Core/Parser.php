@@ -230,7 +230,7 @@ class Parser
 
             $values = array_values($this->insert);
             foreach ($values as $value) {
-                $this->params[] = !empty($value) ? $value : null;
+                $this->params[] = trim($value) != '' ? $value : null;
             }
 
             $query .= 'INSERT INTO ' . $this->table . ' ';
@@ -251,7 +251,7 @@ class Parser
 
             $params = [];
             foreach ($values as $value) {
-                $params[] = !empty($value) ? $value : null;
+                $params[] = trim($value) != '' ? $value : null;
             }
 
             $this->params = array_merge($params, $this->params);
