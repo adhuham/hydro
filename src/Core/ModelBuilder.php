@@ -508,6 +508,7 @@ class ModelBuilder extends Builder
      *
      * @param string $alias
      * @param string $field
+     * @param boolean $removePrefixInAlias
      *
      * @return $aliasedField
      *
@@ -527,12 +528,21 @@ class ModelBuilder extends Builder
      * @param string $alias
      * @param string $field
      * @param string $customField
+     * @param boolean $removePrefixInAlias
      *
      * @return $aliasedField
      *
      */
-    private function aliasedCustomField(string $alias, string $field, string $customField)
-    {
+    private function aliasedCustomField(
+        string $alias,
+        string $field,
+        string $customField,
+        bool $removePrefixInAlias = false
+    ) {
+        if ($removePrefixInAlias) {
+            return $customField . ' as `' . $field . '`';
+        }
+
         return $customField . ' as `' . $alias . '.' . $field . '`';
     }
 }
