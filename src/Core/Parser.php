@@ -37,8 +37,8 @@ class Parser
     // tracks the begining of nested condition
     private $isNestedCondStart = false;
 
-    private $isInsert = false;
-    private $isUpdate = false;
+    protected $isInsert = false;
+    protected $isUpdate = false;
 
     /**
      * Builds conditional statements on both WHERE clause and JOIN clause
