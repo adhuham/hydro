@@ -226,7 +226,7 @@ class Parser
 
         $query = null;
 
-        if (!empty($this->insert)) {
+        if ($this->currentClause == self::CLAUSE_INSERT) {
             $fields = [];
             foreach (array_keys($this->insert) as $field) {
                 $fields[] = $this->escapeField($field);
@@ -245,7 +245,7 @@ class Parser
             return $query;
         }
 
-        if (!empty($this->update)) {
+        if ($this->currentClause == self::CLAUSE_UPDATE) {
             $fields = [];
             foreach (array_keys($this->update) as $field) {
                 $fields[] = $this->escapeField($field) . ' = ?';
