@@ -29,6 +29,7 @@ class Parser
     protected const COND_TYPE_NULL_CHECK = 2;
     protected const COND_TYPE_BETWEEN = 3;
     protected const COND_TYPE_IN = 4;
+    protected const COND_TYPE_LIKE = 5;
 
     // temporary location to store conditions of JOIN statement
     private $joinCond = [];
@@ -101,6 +102,9 @@ class Parser
             $param = $args[1];
             $hasParam = true;
             $placeholder = '(' . rtrim(str_repeat('?, ', count($param)), ', ') . ')';
+        } elseif ($type == self::COND_TYPE_LIKE) {
+            $param = $args[1];
+            $hasParam = true;
         }
 
         if ($hasParam) {
