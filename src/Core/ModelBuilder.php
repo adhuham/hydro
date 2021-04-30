@@ -49,6 +49,8 @@ class ModelBuilder extends Builder
      */
     public function massInsert(array $data)
     {
+        $this->currentClause = self::CLAUSE_INSERT;
+
         foreach ($data as $field => $value) {
             if (isset($this->model->fields[$field])) {
                 $this->insert[$field] = $value;
@@ -68,6 +70,8 @@ class ModelBuilder extends Builder
      */
     public function massUpdate(array $data)
     {
+        $this->currentClause = self::CLAUSE_UPDATE;
+
         foreach ($data as $field => $value) {
             if (isset($this->model->fields[$field])) {
                 $this->update[$field] = $value;
