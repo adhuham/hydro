@@ -37,6 +37,9 @@ class Parser
     // tracks the begining of nested condition
     private $isNestedCondStart = false;
 
+    private $isInsert = false;
+    private $isUpdate = false;
+
     /**
      * Builds conditional statements on both WHERE clause and JOIN clause
      *
@@ -226,7 +229,7 @@ class Parser
 
         $query = null;
 
-        if ($this->currentClause == self::CLAUSE_INSERT) {
+        if ($this->isInsert) {
             $fields = [];
             foreach (array_keys($this->insert) as $field) {
                 $fields[] = $this->escapeField($field);
@@ -245,7 +248,7 @@ class Parser
             return $query;
         }
 
-        if ($this->currentClause == self::CLAUSE_UPDATE) {
+        if ($this->isUpdate) {
             $fields = [];
             foreach (array_keys($this->update) as $field) {
                 $fields[] = $this->escapeField($field) . ' = ?';

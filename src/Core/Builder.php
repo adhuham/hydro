@@ -79,6 +79,7 @@ class Builder extends Parser
     public function insert(array $data)
     {
         $this->currentClause = self::CLAUSE_INSERT;
+        $this->isInsert = true;
 
         $this->insert = $data;
 
@@ -94,6 +95,7 @@ class Builder extends Parser
     public function update(array $data)
     {
         $this->currentClause = self::CLAUSE_UPDATE;
+        $this->isUpdate = true;
 
         $this->update = $data;
 
