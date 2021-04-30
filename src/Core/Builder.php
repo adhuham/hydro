@@ -365,6 +365,16 @@ class Builder extends Parser
         return $this;
     }
 
+    public function orWhereLike()
+    {
+        $this->currentClause = self::CLAUSE_WHERE;
+
+        $args = func_get_args();
+        $this->handleCondition($args, 'OR', self::COND_TYPE_LIKE, 'LIKE');
+
+        return $this;
+    }
+
     /**
      * GROUP BY Clause
      *
