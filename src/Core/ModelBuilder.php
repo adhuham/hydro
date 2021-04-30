@@ -40,6 +40,44 @@ class ModelBuilder extends Builder
     }
 
     /**
+     * Mass Insert
+     *
+     * @param array $data
+     *
+     * @return ModelBuilder $this
+     *
+     */
+    public function massInsert(array $data)
+    {
+        foreach ($data as $field => $value) {
+            if (isset($this->model->fields[$field])) {
+                $this->insert[$field] = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Mass Updte
+     *
+     * @param array $data
+     *
+     * @return ModelBuilder $this
+     *
+     */
+    public function massUpdate(array $data)
+    {
+        foreach ($data as $field => $value) {
+            if (isset($this->model->fields[$field])) {
+                $this->update[$field] = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Defines joins which should be included in the final query
      *
      * @return ModelBuilder $this
