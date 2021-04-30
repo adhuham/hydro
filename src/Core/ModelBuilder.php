@@ -53,7 +53,7 @@ class ModelBuilder extends Builder
         $this->isInsert = true;
 
         foreach ($data as $field => $value) {
-            if (isset($this->model->fields[$field])) {
+            if (in_array($field, $this->model->fields[$field])) {
                 $this->insert[$field] = $value;
             }
         }
@@ -75,7 +75,7 @@ class ModelBuilder extends Builder
         $this->isUpdate = true;
 
         foreach ($data as $field => $value) {
-            if (isset($this->model->fields[$field])) {
+            if (in_array($field, $this->model->fields[$field])) {
                 $this->update[$field] = $value;
             }
         }
