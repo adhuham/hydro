@@ -240,7 +240,7 @@ class Parser
                 $this->params[] = trim($value) != '' ? $value : null;
             }
 
-            $query .= 'INSERT INTO ' . $this->table . ' ';
+            $query .= 'INSERT INTO ' . $this->tableWithoutAlias . ' ';
             $query .= '(' . implode(', ', $fields) . ')';
             $query .= ' VALUES ';
             $query .= '(' . implode(', ', array_fill(1, count($values), '?')) . ')';

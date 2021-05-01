@@ -12,6 +12,7 @@ class Builder extends Parser
     protected $handler;
 
     protected $table;
+    protected $tableWithoutAlias;
 
     protected $select = [
         'prefunction' => null,
@@ -39,6 +40,14 @@ class Builder extends Parser
 
         if (!is_null($table)) {
             $this->table = $this->escapeField($table);
+            $tableWithoutAlias = $table;
+
+            if (stripos($table, ' as ') != false) {
+                list($table, $alias) = preg_split('/ as /i', $table);
+                $tableWithoutAlias = $table;
+            }
+
+            $this->tableWithoutAlias = $this->escapeField($table);
         }
     }
 
