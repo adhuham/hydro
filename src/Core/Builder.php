@@ -112,6 +112,20 @@ class Builder extends Parser
     }
 
     /**
+     * DELETE statement
+     *
+     * @return Builder $this;
+     *
+     */
+    public function delete()
+    {
+        $this->currentClause = self::CLAUSE_DELETE;
+        $this->isDelete = true;
+
+        return $this;
+    }
+
+    /**
      * SELECT Clause
      *
      * @return Builder $this;

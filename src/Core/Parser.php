@@ -21,6 +21,7 @@ class Parser
 
     protected const CLAUSE_INSERT = 9;
     protected const CLAUSE_UPDATE = 10;
+    protected const CLAUSE_DELETE = 11;
 
     /**
      * Condition Types
@@ -37,8 +38,10 @@ class Parser
     // tracks the begining of nested condition
     private $isNestedCondStart = false;
 
+    // track INSERT, UPDATE and DELETE queries
     protected $isInsert = false;
     protected $isUpdate = false;
+    protected $isDelete = false;
 
     /**
      * Builds conditional statements on both WHERE clause and JOIN clause
@@ -228,6 +231,15 @@ class Parser
         }
 
         $query = null;
+
+        if ($this->isDelete) {
+            $query .= 'DELETE FROM ' . $this->table;
+            if (!empty($this->where)) {
+                $query .= ' WHERE ' . implode(' ', $this->where);
+            }
+
+            return $query;
+        }
 
         if ($this->isInsert) {
             $fields = [];
