@@ -14,6 +14,9 @@ class ModelBuilder extends Builder
     private $isSelectFieldsGiven = false;
     private $joinModelInstances = [];
 
+    private $disableAutoJoins = false;
+    private $disableAutoFilters = false;
+
     private $modelSelect = [];
     private $modelCustomFields = [];
     private $modelJoins = [];
@@ -30,9 +33,19 @@ class ModelBuilder extends Builder
 
         parent::__construct($table, $pdo, $handler);
 
+        $this->disableAutoJoins = $this->model->disableAutoJoins ?? false;
+        $this->disableAutoFilters = $this->model->disableAutoFilters ?? false;
+
         $this->modelCustomFields = $this->model->customFields;
-        $this->modelJoins = $this->model->join;
-        $this->modelFilters = $this->model->filter;
+
+        // add defined joins and filters if the disable option
+        // is not set in the model
+        if (!$this->disableAutoJoins) {
+            $this->modelJoins = $this->model->join;
+        }
+        if (!$this->disableAutoFilters) {
+            $this->modelFilters = $this->model->filter;
+        }
 
         // select all fields in current model by default
         // it will be reset if ->select(...) is called explicitly
