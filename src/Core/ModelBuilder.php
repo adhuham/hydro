@@ -14,9 +14,6 @@ class ModelBuilder extends Builder
     private $isSelectFieldsGiven = false;
     private $joinModelInstances = [];
 
-    private $disableAutoJoins = false;
-    private $disableAutoFilters = false;
-
     private $modelSelect = [];
     private $modelCustomFields = [];
     private $modelJoins = [];
@@ -33,17 +30,25 @@ class ModelBuilder extends Builder
 
         parent::__construct($table, $pdo, $handler);
 
-        $this->disableAutoJoins = $this->model->disableAutoJoins ?? false;
-        $this->disableAutoFilters = $this->model->disableAutoFilters ?? false;
-
         $this->modelCustomFields = $this->model->customFields;
 
-        // add defined joins and filters if the disable option
-        // is not set in the model
-        if (!$this->disableAutoJoins) {
+        /**
+         * Add all the joins and filters defined in the model
+         * if the model does not specify joins/filters to
+         * include in the final query
+         *
+         * You can use $withJoins = false or $withFilters = false props
+         * in the model to completely disable adding joins/filters to final query
+         */
+        if (!empty($this->model->withJoins) && is_array($this->model->withJoins)) {
+            $this->withJoins(...$this->model->withJoins);
+        } elseif (!isset($this->model->withJoins)) {
             $this->modelJoins = $this->model->join;
         }
-        if (!$this->disableAutoFilters) {
+
+        if (!empty($this->model->withFilters) && is_array($this->model->withFilters)) {
+            $this->withFilters(...$this->model->withFilters);
+        } elseif (!isset($this->model->withFilters)) {
             $this->modelFilters = $this->model->filter;
         }
 
