@@ -14,6 +14,7 @@ class ModelBuilder extends Builder
     private $isSelectFieldsGiven = false;
     private $joinModelInstances = [];
 
+    private $selectArgs = [];
     private $modelSelect = [];
     private $modelCustomFields = [];
     private $modelJoins = [];
@@ -191,133 +192,11 @@ class ModelBuilder extends Builder
 
         $args = func_get_args();
 
-        $this->modelSelect = [];
-
-        if (empty($args)) {
-            // if no fields given, select all fields in the current model by default
-            foreach ($this->model->fields as $field) {
-                $this->modelSelect[$this->alias][] = $this->aliasedField(
-                    $this->alias,
-                    $field,
-                    true
-                );
-            }
-
-            // select custom fields too
-            foreach ($this->model->customFields as $field => $customField) {
-                $this->modelSelect[$this->alias][] = $this->aliasedCustomField(
-                    $this->alias,
-                    $field,
-                    $customField,
-                    true
-                );
-            }
-        // handle array-based selection
-        } elseif (count($args) == 1 && is_array($args[0])) {
+        if (!empty($args)) {
             $this->isSelectFieldsGiven = true;
-
-            foreach ($args[0] as $alias => $fields) {
-                $model = $this->joinModelInstances[$alias] ?? null;
-
-                if (is_null($model)) {
-                    continue;
-                }
-
-                $removePrefix = ($alias == $this->alias);
-
-                // select all fields (including custom fields)
-                if (is_string($fields) && $fields == '*') {
-                    foreach ($model->fields as $field) {
-                        $this->modelSelect[$alias][] = $this->aliasedField(
-                            $alias,
-                            $field,
-                            $removePrefix
-                        );
-                    }
-
-                    foreach ($model->customFields as $field) {
-                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
-                            $alias,
-                            $field,
-                            $model->customFields[$field],
-                            $removePrefix
-                        );
-                    }
-
-                    continue;
-                }
-
-                // handle single fields passed as string
-                if (is_string($fields)) {
-                    if (isset($model->customFields[$fields])) {
-                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
-                            $alias,
-                            $fields,
-                            $model->customFields[$fields],
-                            $removePrefix
-                        );
-                    } else {
-                        $this->modelSelect[$alias][] = $this->aliasedField(
-                            $alias,
-                            $fields,
-                            $removePrefix
-                        );
-                    }
-
-                    continue;
-                }
-
-                foreach ($fields as $field) {
-                    if (isset($model->customFields[$field])) {
-                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
-                            $alias,
-                            $field,
-                            $model->customFields[$field],
-                            $removePrefix
-                        );
-                    } else {
-                        $this->modelSelect[$alias][] = $this->aliasedField(
-                            $alias,
-                            $field,
-                            $removePrefix
-                        );
-                    }
-                }
-            }
-        } else {
-            $this->isSelectFieldsGiven = true;
-
-            foreach ($args as $field) {
-                // extract aliased prefix and the field name
-                $split = explode('.', $field);
-
-                $alias = count($split) == 2 ? $split[0] : $this->alias;
-                $realField = $split[1] ?? $split[0];
-
-                if ($this->alias == $alias) {
-                    $model = $this->model;
-                } elseif (isset($this->joinModelInstances[$alias])) {
-                    $model = $this->joinModelInstances[$alias];
-                }
-
-                // check if the field exists in the model or any of the joined models
-                if (isset($model) && in_array($realField, $model->fields)) {
-                    $this->modelSelect[$alias][] = $this->aliasedField(
-                        $alias,
-                        $realField
-                    );
-                } elseif (isset($model) && isset($model->customFields[$realField])) {
-                    // check if the field is a custom field
-                    $this->modelSelect[$alias][] = $this->aliasedCustomField(
-                        $alias,
-                        $realField,
-                        $model->customFields[$realField]
-                    );
-                } else {
-                    $this->modelSelect[$this->alias][] = $field;
-                }
-            }
         }
+
+        $this->selectArgs = func_get_args();
 
         return $this;
     }
@@ -515,6 +394,143 @@ class ModelBuilder extends Builder
      */
     private function buildSelect()
     {
+        $args = $this->selectArgs;
+
+        if (empty($args)) {
+            // if no fields given, select all fields in the current model by default
+            foreach ($this->model->fields as $field) {
+                $this->modelSelect[$this->alias][] = $this->aliasedField(
+                    $this->alias,
+                    $field,
+                    true
+                );
+            }
+
+            // select custom fields too
+            foreach ($this->model->customFields as $field => $customField) {
+                $this->modelSelect[$this->alias][] = $this->aliasedCustomField(
+                    $this->alias,
+                    $field,
+                    $customField,
+                    true
+                );
+            }
+        // handle array-based selection
+        } elseif (count($args) == 1 && is_array($args[0])) {
+            $this->isSelectFieldsGiven = true;
+
+            foreach ($args[0] as $alias => $fields) {
+                $model = $this->joinModelInstances[$alias] ?? null;
+
+                if (is_null($model)) {
+                    continue;
+                }
+
+                $removePrefix = ($alias == $this->alias);
+
+                // select all fields (including custom fields)
+                if (is_string($fields) && $fields == '*') {
+                    foreach ($model->fields as $field) {
+                        $this->modelSelect[$alias][] = $this->aliasedField(
+                            $alias,
+                            $field,
+                            $removePrefix
+                        );
+                    }
+
+                    foreach ($model->customFields as $field) {
+                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                            $alias,
+                            $field,
+                            $model->customFields[$field],
+                            $removePrefix
+                        );
+                    }
+
+                    continue;
+                }
+
+                // handle single fields passed as string
+                if (is_string($fields)) {
+                    if (isset($model->customFields[$fields])) {
+                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                            $alias,
+                            $fields,
+                            $model->customFields[$fields],
+                            $removePrefix
+                        );
+                    } else {
+                        $this->modelSelect[$alias][] = $this->aliasedField(
+                            $alias,
+                            $fields,
+                            $removePrefix
+                        );
+                    }
+
+                    continue;
+                }
+
+                foreach ($fields as $field) {
+                    if (isset($model->customFields[$field])) {
+                        $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                            $alias,
+                            $field,
+                            $model->customFields[$field],
+                            $removePrefix
+                        );
+                    } else {
+                        $this->modelSelect[$alias][] = $this->aliasedField(
+                            $alias,
+                            $field,
+                            $removePrefix
+                        );
+                    }
+                }
+            }
+        } else {
+            $this->isSelectFieldsGiven = true;
+
+            foreach ($args as $field) {
+                // extract aliased prefix and the field name
+                $split = explode('.', $field);
+
+                $alias = $this->alias;
+                $removePrefix = true;
+
+                if (count($split) == 2) {
+                    $removePrefix = false;
+                    $alias = $split[0];
+                }
+
+                $realField = $split[1] ?? $split[0];
+
+                if ($this->alias == $alias) {
+                    $model = $this->model;
+                } elseif (isset($this->joinModelInstances[$alias])) {
+                    $model = $this->joinModelInstances[$alias];
+                }
+
+                // check if the field exists in the model or any of the joined models
+                if (isset($model) && in_array($realField, $model->fields)) {
+                    $this->modelSelect[$alias][] = $this->aliasedField(
+                        $alias,
+                        $realField,
+                        $removePrefix
+                    );
+                } elseif (isset($model) && isset($model->customFields[$realField])) {
+                    // check if the field is a custom field
+                    $this->modelSelect[$alias][] = $this->aliasedCustomField(
+                        $alias,
+                        $realField,
+                        $model->customFields[$realField],
+                        $removePrefix
+                    );
+                } else {
+                    $this->modelSelect[$this->alias][] = $field;
+                }
+            }
+        }
+
         $this->select['fields'] = [];
 
         if (!empty($this->modelSelect)) {
