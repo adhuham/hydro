@@ -359,7 +359,7 @@ class ModelBuilder extends Builder
     {
         // build joins from the model
         if (!empty($this->modelJoins)) {
-            foreach ($this->modelJoins as $join) {
+            foreach ($this->modelJoins as $name => $join) {
                 $join($this);
             }
         }
@@ -553,9 +553,21 @@ class ModelBuilder extends Builder
      */
     private function resolveJoins(string $type, array $args)
     {
-        if (class_exists($args[0])) {
-            $model = new $args[0]();
-            $alias = $model->alias ?? $model->table;
+        // By passing the model class name and alias in an array as the first arguement
+        // will allow you to define a custom alias for the join
+        if (
+            (is_array($args[0]) && count($args[0]) == 2 && class_exists($args[0][0])) ||
+            is_string($args[0]) && class_exists($args[0])
+        ) {
+            // here we are creating an instance of the joining model
+            if (is_array($args[0])) {
+                $model = new $args[0][0]();
+                // take the alias from array instead of model
+                $alias = $args[0][1];
+            } else {
+                $model = new $args[0]();
+                $alias = $model->alias ?? $model->table;
+            }
 
             $this->joinModelInstances[$alias] = $model;
 
