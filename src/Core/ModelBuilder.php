@@ -27,7 +27,7 @@ class ModelBuilder extends Builder
         $this->model = $model;
         $this->alias = $model->alias ?? $model->table;
 
-        $table = $this->model->table . ' as `' . $this->alias . '`';
+        $table = '`' . $this->model->table . '` as `' . $this->alias . '`';
 
         parent::__construct($table, $pdo, $handler);
 
