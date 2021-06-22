@@ -256,7 +256,7 @@ class Builder extends Parser
         $this->currentClause = self::CLAUSE_WHERE;
 
         $args = func_get_args();
-        $this->handleCondition($args, 'AND', self::COND_TYPE_NOT, 'NOT');
+        $this->handleCondition($args, 'AND NOT', self::COND_TYPE_NORMAL);
 
         return $this;
     }
@@ -345,7 +345,7 @@ class Builder extends Parser
         $this->currentClause = self::CLAUSE_WHERE;
 
         $args = func_get_args();
-        $this->handleCondition($args, 'OR', self::COND_TYPE_NOT, 'NOT');
+        $this->handleCondition($args, 'OR NOT', self::COND_TYPE_NORMAL);
 
         return $this;
     }

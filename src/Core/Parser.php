@@ -31,7 +31,6 @@ class Parser
     protected const COND_TYPE_BETWEEN = 3;
     protected const COND_TYPE_IN = 4;
     protected const COND_TYPE_LIKE = 5;
-    protected const COND_TYPE_NOT = 6;
 
     // temporary location to store conditions of JOIN statement
     private $joinCond = [];
