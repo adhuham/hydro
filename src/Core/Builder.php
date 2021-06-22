@@ -251,6 +251,16 @@ class Builder extends Parser
         return $this;
     }
 
+    public function whereNot()
+    {
+        $this->currentClause = self::CLAUSE_WHERE;
+
+        $args = func_get_args();
+        $this->handleCondition($args, 'AND', self::COND_TYPE_NORMAL, 'NOT');
+
+        return $this;
+    }
+
     public function whereNotNull()
     {
         $this->currentClause = self::CLAUSE_WHERE;
@@ -326,6 +336,16 @@ class Builder extends Parser
         $this->currentClause = self::CLAUSE_WHERE;
 
         $this->handleCondition(func_get_args(), 'OR');
+
+        return $this;
+    }
+
+    public function orWhereNot()
+    {
+        $this->currentClause = self::CLAUSE_WHERE;
+
+        $args = func_get_args();
+        $this->handleCondition($args, 'OR', self::COND_TYPE_NORMAL, 'NOT');
 
         return $this;
     }
