@@ -571,6 +571,11 @@ class ModelBuilder extends Builder
 
             $this->joinModelInstances[$alias] = $model;
 
+            // call model init
+            if (method_exists($model, 'initialize')) {
+                $model->initialize();
+            }
+
             // add fields of the joined table by default
             // if ->select(...)  is not explicitly called
             if (!$this->isSelectFieldsGiven) {
@@ -626,9 +631,13 @@ class ModelBuilder extends Builder
     private function aliasedCustomField(
         string $alias,
         string $field,
-        string $customField,
+        $customField,
         bool $removePrefixInAlias = false
     ) {
+        if (is_callable($customField)) {
+            $customField = $customField($alias);
+        }
+
         if ($removePrefixInAlias) {
             return $customField . ' as `' . $field . '`';
         }
